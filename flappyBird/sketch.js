@@ -64,7 +64,9 @@ function setup() {
   humanPlayer = new Player();
 }
 
+let count = 0;
 function draw() {
+  count++;
   // background(135, 206, 250);
   drawToScreen();
   if (showBestEachGen) {
@@ -87,7 +89,7 @@ function draw() {
       population.naturalSelection();
     }
   }
-  noLoop();
+  if (count >= 100) noLoop();
   // writeInfo();
 }
 //-----------------------------------------------------------------------------------
