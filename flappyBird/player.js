@@ -220,31 +220,33 @@ class Player {
 
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   //fot Genetic algorithm
-  calculateFitness(dataset) {
-    self.test = function (set, cost = methods.cost.MSE) {
-      let error = 0;
-      let start = Date.now();
+  calculateFitness(set) {
+    const cost = function (targets, outputs) {
+      // For each output in the target array, take the error, square it, and add it to the total error
+      const error = outputs.reduce(function (total, value, i) {
+        const err = targets[i] - outputs[i];
+        return (total += Math.pow(err, 2));
+      }, 0);
 
-      _.times(set.length, (index) => {
-        let input = set[index].input;
-        let target = set[index].output;
-        let output = self.activate(input, { trace: false });
-        error += cost(target, output);
-      });
-
-      error /= set.length;
-
-      const results = {
-        error: error,
-        time: Date.now() - start,
-      };
-
-      return results;
+      // Divide the total squared error by the amount of outputs to get the mean-squared-error
+      return error / outputs.length;
     };
 
-    self.fitnessFn(network, dataset, cost);
-    this.fitness = 1 + this.score * this.score + this.lifespan / 20.0;
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+    let error = 0;
+    let times = set.length;
+
+    // Do this for as many times as we have entries in the dataset
+    for (let i = 0; i < times; i++) {
+      // Get ideal inputs and outputs (targets) from dataset
+      let input = set[i].input;
+      let target = set[i].output;
+
+      let output = this.brain.feedForward(input);
+      error += cost(target, output);
+    }
+
+    error /= set.length;
+    this.fitness = error;
   }
 
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
