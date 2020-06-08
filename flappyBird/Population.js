@@ -167,9 +167,9 @@ class Population {
   }
   //------------------------------------------------------------------------------------------------------------------------------------------
   //calculates the fitness of all of the players
-  calculateFitness() {
+  calculateFitness(dataset) {
     for (var i = 1; i < this.players.length; i++) {
-      this.players[i].calculateFitness();
+      this.players[i].calculateFitness(dataset);
     }
   }
   //------------------------------------------------------------------------------------------------------------------------------------------

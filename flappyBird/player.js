@@ -1,5 +1,4 @@
 class Player {
-
   constructor() {
     this.x = canvas.width / 3;
     this.y = canvas.height / 2;
@@ -16,7 +15,6 @@ class Player {
     this.pipes2.setX(1.5 * canvas.width + this.pipes2.topPipe.width / 2);
     this.pipeRandomNo++;
     this.ground = new Ground();
-
 
     //-----------------------------------------------------------------------
     //neat stuff
@@ -35,13 +33,14 @@ class Player {
     this.brain = new Genome(this.genomeInputs, this.genomeOutputs);
   }
 
-
   show() {
-
     this.pipes1.show();
     this.pipes2.show();
     push();
-    translate(this.x - this.size / 2 - 8 + birdSprite.width / 2, this.y - this.size / 2 + birdSprite.height / 2);
+    translate(
+      this.x - this.size / 2 - 8 + birdSprite.width / 2,
+      this.y - this.size / 2 + birdSprite.height / 2
+    );
     if (this.velY < 15) {
       rotate(-PI / 6);
       this.fallRotation = -PI / 6;
@@ -69,7 +68,6 @@ class Player {
     if (!this.isOnGround) {
       this.y += this.velY;
     }
-
   }
 
   updatePipes() {
@@ -92,7 +90,10 @@ class Player {
     this.updatePipes();
     this.move();
 
-    if (this.pipes1.playerPassed(this.x - this.size / 2) || this.pipes2.playerPassed(this.x - this.size / 2)) {
+    if (
+      this.pipes1.playerPassed(this.x - this.size / 2) ||
+      this.pipes2.playerPassed(this.x - this.size / 2)
+    ) {
       this.score++;
     }
 
@@ -128,8 +129,6 @@ class Player {
     if (this.dead && this.velY < 0) {
       this.velY = 0;
     }
-
-
   }
 
   flap() {
@@ -139,50 +138,59 @@ class Player {
     }
   }
 
-
-
   //-------------------------------------------------------------------neat functions
   look() {
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
     this.vision = [];
     this.vision[0] = map(this.velY, -25, 25, -1, 1); //bird can tell its current y velocity
     var closestPipe = this.pipes1;
-    if (!this.pipes2.passed && (this.pipes1.passed || this.pipes1.bottomPipe.x - this.pipes2.bottomPipe.x > 0)) {
+    if (
+      !this.pipes2.passed &&
+      (this.pipes1.passed ||
+        this.pipes1.bottomPipe.x - this.pipes2.bottomPipe.x > 0)
+    ) {
       closestPipe = this.pipes2;
     }
     var distanceToClosestPipe = closestPipe.bottomPipe.x - this.x;
     this.vision[1] = map(distanceToClosestPipe, 0, canvas.width - this.x, 1, 0);
-    this.vision[2] = map(max(0, closestPipe.bottomPipe.topY - this.y), 0, 700, 0, 1); //height above bottomY
-    this.vision[3] = map(max(0, this.y - closestPipe.topPipe.bottomY), 0, 700, 0, 1); //distance below topThing
-
+    this.vision[2] = map(
+      max(0, closestPipe.bottomPipe.topY - this.y),
+      0,
+      700,
+      0,
+      1
+    ); //height above bottomY
+    this.vision[3] = map(
+      max(0, this.y - closestPipe.topPipe.bottomY),
+      0,
+      700,
+      0,
+      1
+    ); //distance below topThing
   }
-
 
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   //gets the output of the this.brain then converts them to actions
   think() {
+    var max = 0;
+    var maxIndex = 0;
+    //get the output of the neural network
+    this.decision = this.brain.feedForward(this.vision);
 
-      var max = 0;
-      var maxIndex = 0;
-      //get the output of the neural network
-      this.decision = this.brain.feedForward(this.vision);
-
-      if (this.decision[0] > 0.6) {
-        this.flap();
-      }
-      // for (var i = 0; i < this.decision.length; i++) {
-      //   if (this.decision[i] > max) {
-      //     max = this.decision[i];
-      //     maxIndex = i;
-      //   }
-      // }
-
-
-
-      //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+    if (this.decision[0] > 0.6) {
+      this.flap();
     }
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------
-    //returns a clone of this player with the same brian
+    // for (var i = 0; i < this.decision.length; i++) {
+    //   if (this.decision[i] > max) {
+    //     max = this.decision[i];
+    //     maxIndex = i;
+    //   }
+    // }
+
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
+  }
+  //---------------------------------------------------------------------------------------------------------------------------------------------------------
+  //returns a clone of this player with the same brian
   clone() {
     var clone = new Player();
     clone.brain = this.brain.clone();
@@ -212,18 +220,16 @@ class Player {
 
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   //fot Genetic algorithm
-  calculateFitness() {
+  calculateFitness(dataset) {
     this.fitness = 1 + this.score * this.score + this.lifespan / 20.0;
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
   }
 
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   crossover(parent2) {
-
     var child = new Player();
     child.brain = this.brain.crossover(parent2.brain);
     child.brain.generateNetwork();
     return child;
   }
-
 }
