@@ -242,10 +242,12 @@ class Player {
       let target = set[i].output;
 
       let output = this.brain.feedForward(input);
+      console.log("Neural network output: ", output);
       error += cost(target, output);
     }
 
     error /= set.length;
+    console.log("Network error: ", error);
     this.fitness = error;
   }
 
