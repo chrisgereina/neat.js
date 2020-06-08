@@ -221,6 +221,28 @@ class Player {
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   //fot Genetic algorithm
   calculateFitness(dataset) {
+    self.test = function (set, cost = methods.cost.MSE) {
+      let error = 0;
+      let start = Date.now();
+
+      _.times(set.length, (index) => {
+        let input = set[index].input;
+        let target = set[index].output;
+        let output = self.activate(input, { trace: false });
+        error += cost(target, output);
+      });
+
+      error /= set.length;
+
+      const results = {
+        error: error,
+        time: Date.now() - start,
+      };
+
+      return results;
+    };
+
+    self.fitnessFn(network, dataset, cost);
     this.fitness = 1 + this.score * this.score + this.lifespan / 20.0;
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
   }
