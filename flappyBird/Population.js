@@ -107,6 +107,10 @@ class Population {
     this.speciate(); //seperate the this.players varo this.species
     this.calculateFitness(dataset); //calculate the fitness of each player
     this.sortSpecies(); //sort the this.species to be ranked in fitness order, best first
+    console.log(
+      "POPULATION'S BEST FITNESS",
+      this.species[0].players[0].fitness
+    );
     if (this.massExtinctionEvent) {
       this.massExtinction();
       this.massExtinctionEvent = false;
