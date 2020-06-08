@@ -4,7 +4,6 @@ class Pipe {
     this.height = height;
     this.x = canvas.width;
     this.isTop = isTop;
-    this.randomMultiplier = random(5);
     if (isTop) {
       this.topY = 0;
       this.bottomY = this.height;
@@ -23,15 +22,13 @@ class Pipe {
     } else {
       image(bottomPipeSprite, this.x, this.topY);
     }
-
   }
 
   update() {
-    this.x -= panSpeed * this.randomMultiplier;
+    this.x -= panSpeed;
   }
 
   colided(p) {
-
     if (p.x + p.size / 2 >= this.x && p.x - p.size / 2 <= this.x + this.width) {
       if (!this.isTop && p.y + p.size / 2 >= this.topY) {
         return true;
@@ -39,9 +36,7 @@ class Pipe {
       if (this.isTop && p.y - p.size / 2 <= this.bottomY) {
         return true;
       }
-
     }
     return false;
   }
-
 }

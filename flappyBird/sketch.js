@@ -1,4 +1,4 @@
-var panSpeed = 8;
+var panSpeed = 8 + Math.random() * 5;
 var gravity = 3;
 var player;
 
@@ -27,7 +27,6 @@ var humanPlaying = false; //true if the user is playing
 
 var humanPlayer;
 
-
 var showBrain = false;
 var showBestEachGen = false;
 var upToGen = 0;
@@ -36,7 +35,7 @@ var genPlayerTemp; //player
 var showNothing = false;
 
 var randomPipeHeights = [];
-var isChristmas = true;
+var isChristmas = false;
 
 function preload() {
   if (isChristmas) {
@@ -44,11 +43,10 @@ function preload() {
   } else {
     birdSprite = loadImage("images/fatBird.png");
   }
-  topPipeSprite = loadImage("images/full pipe top.png");
-  bottomPipeSprite = loadImage("images/full pipe bottom.png");
+  topPipeSprite = loadImage("images/full_pipe_top.png");
+  bottomPipeSprite = loadImage("images/full_pipe_bottom.png");
   backgroundSprite = loadImage("images/background.png");
   groundSprite = loadImage("images/groundPiece.png");
-
 }
 
 function setup() {
@@ -69,16 +67,22 @@ function setup() {
 function draw() {
   // background(135, 206, 250);
   drawToScreen();
-  if (showBestEachGen) { //show the best of each gen
+  if (showBestEachGen) {
+    //show the best of each gen
     showBestPlayersForEachGeneration();
-  } else if (humanPlaying) { //if the user is controling the ship[
+  } else if (humanPlaying) {
+    //if the user is controling the ship[
     showHumanPlaying();
-  } else if (runBest) { // if replaying the best ever game
+  } else if (runBest) {
+    // if replaying the best ever game
     showBestEverPlayer();
-  } else { //if just evolving normally
-    if (!population.done()) { //if any players are alive then update them
+  } else {
+    //if just evolving normally
+    if (!population.done()) {
+      //if any players are alive then update them
       population.updateAlive();
-    } else { //all dead
+    } else {
+      //all dead
       //genetic algorithm
       population.naturalSelection();
     }
@@ -87,40 +91,48 @@ function draw() {
 }
 //-----------------------------------------------------------------------------------
 function showBestPlayersForEachGeneration() {
-  if (!genPlayerTemp.dead) { //if current gen player is not dead then update it
+  if (!genPlayerTemp.dead) {
+    //if current gen player is not dead then update it
 
     genPlayerTemp.look();
     genPlayerTemp.think();
     genPlayerTemp.update();
     genPlayerTemp.show();
-  } else { //if dead move on to the next generation
+  } else {
+    //if dead move on to the next generation
     upToGen++;
-    if (upToGen >= population.genPlayers.length) { //if at the end then return to the start and stop doing it
+    if (upToGen >= population.genPlayers.length) {
+      //if at the end then return to the start and stop doing it
       upToGen = 0;
       showBestEachGen = false;
-    } else { //if not at the end then get the next generation
+    } else {
+      //if not at the end then get the next generation
       genPlayerTemp = population.genPlayers[upToGen].cloneForReplay();
     }
   }
 }
 //-----------------------------------------------------------------------------------
 function showHumanPlaying() {
-  if (!humanPlayer.dead) { //if the player isnt dead then move and show the player based on input
+  if (!humanPlayer.dead) {
+    //if the player isnt dead then move and show the player based on input
     humanPlayer.look();
     humanPlayer.update();
     humanPlayer.show();
-  } else { //once done return to ai
+  } else {
+    //once done return to ai
     humanPlaying = false;
   }
 }
 //-----------------------------------------------------------------------------------
 function showBestEverPlayer() {
-  if (!population.bestPlayer.dead) { //if best player is not dead
+  if (!population.bestPlayer.dead) {
+    //if best player is not dead
     population.bestPlayer.look();
     population.bestPlayer.think();
     population.bestPlayer.update();
     population.bestPlayer.show();
-  } else { //once dead
+  } else {
+    //once dead
     runBest = false; //stop replaying it
     population.bestPlayer = population.bestPlayer.cloneForReplay(); //reset the best player so it can play again
   }
@@ -134,12 +146,11 @@ function drawToScreen() {
     // showAll();
     // updateAll();
     drawBrain();
-
-
   }
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-function drawBrain() { //show the brain of whatever genome is currently showing
+function drawBrain() {
+  //show the brain of whatever genome is currently showing
   var startX = 350; //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<replace
   var startY = 550;
   var w = 300;
@@ -147,8 +158,7 @@ function drawBrain() { //show the brain of whatever genome is currently showing
 
   if (runBest) {
     population.bestPlayer.brain.drawGenome(startX, startY, w, h);
-  } else
-  if (humanPlaying) {
+  } else if (humanPlaying) {
     showBrain = false;
   } else if (showBestEachGen) {
     genPlayerTemp.brain.drawGenome(startX, startY, w, h);
@@ -184,7 +194,6 @@ function writeInfo() {
     textAlign(LEFT);
     textSize(30);
     text("Gen: " + population.gen, 20, 50);
-
   } else {
     var bestCurrentPlayer = population.getCurrentBest();
 
@@ -193,15 +202,12 @@ function writeInfo() {
     textAlign(LEFT);
 
     text("Gen: " + population.gen, 20, 50);
-
   }
 }
 
-
-
 function keyPressed() {
   switch (key) {
-    case ' ':
+    case " ":
       //toggle showBest
       if (humanPlaying) {
         humanPlayer.flap();
@@ -210,42 +216,42 @@ function keyPressed() {
       }
 
       break;
-    case 'F': //speed up frame rate
+    case "F": //speed up frame rate
       speed += 10;
       frameRate(speed);
       print(speed);
       break;
-    case 'S': //slow down frame rate
+    case "S": //slow down frame rate
       if (speed > 10) {
         speed -= 10;
         frameRate(speed);
         print(speed);
       }
       break;
-    case 'B': //run the best
+    case "B": //run the best
       runBest = !runBest;
       break;
-    case 'G': //show generations
+    case "G": //show generations
       showBestEachGen = !showBestEachGen;
       upToGen = 0;
       genPlayerTemp = population.genPlayers[upToGen].clone();
       break;
-    case 'N': //show absolutely nothing in order to speed up computation
+    case "N": //show absolutely nothing in order to speed up computation
       showNothing = !showNothing;
       break;
-    case 'P': //play
+    case "P": //play
       humanPlaying = !humanPlaying;
       humanPlayer = new Player();
       break;
   }
   //any of the arrow keys
   switch (keyCode) {
-
     case RIGHT_ARROW: //right is used to move through the generations
-
-      if (showBestEachGen) { //if showing the best player each generation then move on to the next generation
+      if (showBestEachGen) {
+        //if showing the best player each generation then move on to the next generation
         upToGen++;
-        if (upToGen >= population.genPlayers.length) { //if reached the current generation then exit out of the showing generations mode
+        if (upToGen >= population.genPlayers.length) {
+          //if reached the current generation then exit out of the showing generations mode
           showBestEachGen = false;
         } else {
           genPlayerTemp = population.genPlayers[upToGen].cloneForReplay();
