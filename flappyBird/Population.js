@@ -45,8 +45,8 @@ class Population {
           this.players[i].show();
           firstShown = true;
         }
-        if (this.players[i].score > this.globalBestScore) {
-          this.globalBestScore = this.players[i].score;
+        if (this.players[i].fitness > this.globalBestScore) {
+          this.globalBestScore = this.players[i].fitness;
         }
       }
     }
@@ -69,11 +69,11 @@ class Population {
 
     //if best thisthis.gen is better than the global best score then set the global best as the best thisthis.gen
 
-    if (tempBest.score >= this.bestScore) {
+    if (tempBest.fitness >= this.bestScore) {
       this.genPlayers.push(tempBest.cloneForReplay());
       console.log("old best: " + this.bestScore);
-      console.log("new best: " + tempBest.score);
-      this.bestScore = tempBest.score;
+      console.log("new best: " + tempBest.fitness);
+      this.bestScore = tempBest.fitness;
       this.bestPlayer = tempBest.cloneForReplay();
     }
   }
@@ -295,8 +295,8 @@ class Population {
           if (!showNothing && (!showBest || i == 0)) {
             this.players[i].show();
           }
-          if (this.players[i].score > this.globalBestScore) {
-            this.globalBestScore = this.players[i].score;
+          if (this.players[i].fitness > this.globalBestScore) {
+            this.globalBestScore = this.players[i].fitness;
           }
         }
       }
