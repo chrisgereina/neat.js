@@ -81,6 +81,27 @@ class Population {
   //------------------------------------------------------------------------------------------------------------------------------------------------
   //this function is called when all the players in the this.players are dead and a newthis.generation needs to be made
   naturalSelection(dataset) {
+    // Modified XORSet due to neural networks taking in 4 inputs
+    // XOR is true only if exactly one of the inputs is true
+    dataset = [
+      { input: [0, 0, 0, 0], output: [0] },
+      { input: [0, 0, 0, 1], output: [1] },
+      { input: [0, 0, 1, 0], output: [1] },
+      { input: [0, 0, 1, 1], output: [0] },
+      { input: [0, 1, 0, 0], output: [1] },
+      { input: [0, 1, 0, 1], output: [0] },
+      { input: [0, 1, 1, 0], output: [0] },
+      { input: [0, 1, 1, 1], output: [0] },
+      { input: [1, 0, 0, 0], output: [1] },
+      { input: [1, 0, 0, 1], output: [0] },
+      { input: [1, 0, 1, 0], output: [0] },
+      { input: [1, 0, 1, 1], output: [0] },
+      { input: [1, 1, 0, 0], output: [0] },
+      { input: [1, 1, 0, 1], output: [0] },
+      { input: [1, 1, 1, 0], output: [0] },
+      { input: [1, 1, 1, 1], output: [0] },
+    ];
+
     // this.batchNo = 0;
     var previousBest = this.players[0];
     this.speciate(); //seperate the this.players varo this.species
