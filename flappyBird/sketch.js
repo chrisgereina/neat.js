@@ -78,7 +78,7 @@ function draw() {
     showBestEverPlayer();
   } else {
     //if just evolving normally
-    if (!population.done()) {
+    if (false) {
       //if any players are alive then update them
       population.updateAlive();
     } else {
@@ -87,6 +87,7 @@ function draw() {
       population.naturalSelection();
     }
   }
+  noLoop();
   // writeInfo();
 }
 //-----------------------------------------------------------------------------------
