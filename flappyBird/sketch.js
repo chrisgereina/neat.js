@@ -16,7 +16,7 @@ var dieOff = false;
 
 //-------------------------------------------------------------------------------- neat globals
 
-var nextConnectionNo = 1000;
+var nextConnectionNo = 1;
 var population;
 var speed = 60;
 
