@@ -247,7 +247,6 @@ class Player {
 
     error /= set.length;
     const fitness = 1 - error;
-    console.log("Network fitness: ", fitness.toFixed(3));
     this.fitness = fitness;
   }
 
