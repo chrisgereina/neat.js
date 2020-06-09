@@ -18,4 +18,32 @@ How to start the evolution process:
 
 Open your browser's console
 
-As of de5da3149a78c7b19bed8e53d376893540d3eb66 the evolution process is hardcoded to use a dataset to evolve, because there is no visual component the results are currently being sent to the browser console.
+As of de5da3149a78c7b19bed8e53d376893540d3eb66 the evolution process is hardcoded to use a dataset to evolve, because there are no visible agents, fitness output is being logged to the console for a four input XOR dataset. The network within the blue flappy-bird background does update to reflect changes in the topology of the network.
+
+## How to format input / output data to evaluate fitness
+
+The format for the dataset used internally to evaluate fitness and evolve is the same as [Neataptic](https://github.com/wagenaartje/neataptic) and [Carrot](https://github.com/liquidcarrot/carrot)
+
+The dataset is a series of objects with two keys, `input` and `output` which correspond to the inputs and outputs of the neural network. Currently the inputs are hardcoded at 4 and the output is hardcoded at 1. Below is a 4 input XOR gate for demonstration.
+
+```
+    // XOR is true only if exactly one of the inputs is true
+    dataset = [
+      { input: [0, 0, 0, 0], output: [0] },
+      { input: [0, 0, 0, 1], output: [1] },
+      { input: [0, 0, 1, 0], output: [1] },
+      { input: [0, 0, 1, 1], output: [0] },
+      { input: [0, 1, 0, 0], output: [1] },
+      { input: [0, 1, 0, 1], output: [0] },
+      { input: [0, 1, 1, 0], output: [0] },
+      { input: [0, 1, 1, 1], output: [0] },
+      { input: [1, 0, 0, 0], output: [1] },
+      { input: [1, 0, 0, 1], output: [0] },
+      { input: [1, 0, 1, 0], output: [0] },
+      { input: [1, 0, 1, 1], output: [0] },
+      { input: [1, 1, 0, 0], output: [0] },
+      { input: [1, 1, 0, 1], output: [0] },
+      { input: [1, 1, 1, 0], output: [0] },
+      { input: [1, 1, 1, 1], output: [0] },
+    ];
+```
